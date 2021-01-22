@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin page</title>
+    <h1>Admin page</h1>
+</head>
+<body>
+<form action="/set_ip" method="post" th:object="${inetAddress}" th:action="@{/set_ip}" th:method="post" id="ipAdd" required >
+    <span th:if="${#fields.hasErrors('ipAddress')}" th:errors="*{ipAddress}"></span>
+    <span th:if="${exception!=empty}" th:text="${exception}"></span>
+    <br>Insert ip address for heartbeat checking</br>
+    <input type="text" th:field="*{ipAddress}" required pattern="(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})"
+           oninvalid="setCustomValidity('This ip address is invalid')"
+           onchange="try{setCustomValidity('')}catch(e){}" placeholder="ip address" >
+    <p>
+    <input type="submit">
+</form>
+</body>
+</html>
