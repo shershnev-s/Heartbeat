@@ -2,58 +2,32 @@ package by.tut.shershnev.server.service.impl;
 
 import by.tut.shershnev.server.service.PingStarterService;
 import by.tut.shershnev.server.service.model.InetAddressDTO;
-import org.quartz.*;
-import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.stereotype.Service;
-import org.quartz.JobDetail;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static by.tut.shershnev.server.service.impl.PingJobServiceImpl.IP_ADDRESS_KEY;
 
 @Service
 public class PingStarterServiceImpl implements PingStarterService {
 
-    @Override
-    public void ping(InetAddressDTO inetAddressDTO) throws SchedulerException, IOException {
-        Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
-        scheduler.start();
-            String ipAddress = inetAddressDTO.getIpAddress();
-            checkIsValidIpAddressAndThrowException(ipAddress);
-            List<String> ipAddressesList = new ArrayList<>();
-            ipAddressesList.add(ipAddress);
+    private final PingServiceImpl pingService;
+    public static final String IP_ADDRESS_KEY = "ip_addr";
 
-            for (String address : ipAddressesList) {
-                Trigger trigger = TriggerBuilder.newTrigger()
-                        .withIdentity("pingTrigger " + address, "group " + address)
-                        .startNow()
-                        .withSchedule(SimpleScheduleBuilder.simpleSchedule()
-                                .withIntervalInSeconds(3)
-                                .repeatForever())
-                        .build();
+    public PingStarterServiceImpl(PingServiceImpl pingService) {
+        this.pingService = pingService;
+    }
 
-                JobDataMap jobDataMap = new JobDataMap();
-                jobDataMap.put("pingTrigger", "fireAfterEvery5SecondsRepeatThrice");
-                jobDataMap.put(IP_ADDRESS_KEY, address);
+    public void startPing(InetAddressDTO inetAddressDTO) throws IOException, InterruptedException {
+        String ipAddress = inetAddressDTO.getIpAddress();
+        checkIsValidIpAddress(ipAddress);
+        pingService.ping(ipAddress);
+    }
 
-                JobDetail jobDetail = JobBuilder.newJob(PingJobServiceImpl.class)
-                        .usingJobData(jobDataMap)
-                        .withIdentity(address, "group " + address)
-                        .build();
-
-                scheduler.scheduleJob(jobDetail, trigger);
-
-            }
-
+    private void checkIsValidIpAddress(String ipAddress) throws IOException {
+        String PATTERN = "^((0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)\\.){3}(0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)$";
+        boolean isValid = ipAddress.matches(PATTERN);
+        if (!isValid){
+            throw new IOException();
         }
-
-        private void checkIsValidIpAddressAndThrowException(String ipAddress) throws IOException{
-            InetAddress inetAddress = InetAddress.getByName(ipAddress);
-            inetAddress.isReachable(100);
-        }
+    }
 
 }

@@ -11,5 +11,4 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ComponentScan(basePackages = {"by.tut.shershnev"})
 public class ServerConfig extends SpringBootServletInitializer {
 
-
 }

@@ -5,8 +5,7 @@ import javax.validation.constraints.Pattern;
 
 public class InetAddressDTO {
 
-    //@Pattern(regexp = "\\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\\.|$)){4}\\b", message = "This ip address not exist")
-    @Pattern(regexp = "\\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\\.|$)){4}\\b", message = "This ip address not exist")
+    @Pattern(regexp = "\\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\\.|$)){4}\\b", message = "This ip address is invalid")
     private String ipAddress;
 
     public String getIpAddress() {
