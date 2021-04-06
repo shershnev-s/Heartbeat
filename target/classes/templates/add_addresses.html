@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add ip addresses page</title>
+    <h1>Add ip address page</h1>
+</head>
+<body>
+<form action="/add_ip" method="post" th:object="${inetAddress}" th:action="@{/add_ip}" th:method="post" id="ipAdd" required >
+    <span th:if="${#fields.hasErrors('ipAddress')}" th:errors="*{ipAddress}"></span>
+    <span th:if="${exception!=empty}" th:text="${exception}"></span>
+    <br>Insert ip address for heartbeat checking</br>
+    <input type="text" th:field="*{ipAddress}" required pattern="(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})"
+           oninvalid="setCustomValidity('This ip address is invalid')"
+           onemptied=""
+           onchange="try{setCustomValidity('')}catch(e){}" placeholder="ip address" >
+    <p>
+    <input type="submit">
+</form>
+<p>
+    <button value="Refresh Page" onClick="window.location.reload();">Refresh</button>
+<table border="1" style="width:300px">
+    <tr>
+        <td>Addresses</td>
+        <td>Statuses</td>
+    </tr>
+    <tr th:each="address : ${addresses}">
+        <td th:text="${address.ipAddress}">ipAddress</td>
+        <td th:text="${address.status}">status</td>
+        <td> <a th:href="@{/add_ip/delete_ip/{ip}(ip=${address.ipAddress})}">Delete</a></td>
+    </tr>
+</table>
+<p></p>
+</body>
+</html>
