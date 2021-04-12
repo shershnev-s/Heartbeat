@@ -1,0 +1,22 @@
+"2021-04-01 12:40:53 [restartedMain] - Starting ServerHeartbeatApplication using Java 15.0.1 on G1-008-IT with PID 7464 (E:\Server_heartbeat\Old-style-threads\Heartbeat\target\classes started by admin_ss in E:\Server_heartbeat\Old-style-threads\Heartbeat)
+""2021-04-01 12:40:53 [restartedMain] - No active profile set, falling back to default profiles: default
+""2021-04-01 12:40:53 [restartedMain] - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+""2021-04-01 12:40:53 [restartedMain] - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+""2021-04-01 12:40:54 [restartedMain] - Tomcat initialized with port(s): 8080 (http)
+""2021-04-01 12:40:54 [restartedMain] - Starting service [Tomcat]
+""2021-04-01 12:40:54 [restartedMain] - Starting Servlet engine: [Apache Tomcat/9.0.39]
+""2021-04-01 12:40:54 [restartedMain] - Initializing Spring embedded WebApplicationContext
+""2021-04-01 12:40:54 [restartedMain] - Root WebApplicationContext: initialization completed in 950 ms
+""2021-04-01 12:40:54 [restartedMain] - Instantiate Telegram Bots API...
+""2021-04-01 12:40:54 [restartedMain] - Register Telegram Bots API...
+""2021-04-01 12:40:55 [Thread-4] - Host 10.10.20.129 is online 
+""2021-04-01 12:40:55 [Thread-5] - Host 10.10.10.5 is offline 
+""2021-04-01 12:40:55 [restartedMain] - LiveReload server is running on port 35729
+""2021-04-01 12:40:55 [restartedMain] - Tomcat started on port(s): 8080 (http) with context path ''
+""2021-04-01 12:40:55 [restartedMain] - Started ServerHeartbeatApplication in 3.561 seconds (JVM running for 5.283)
+""2021-04-01 12:40:57 [Thread-4] - Host 10.10.20.129 is online 
+""2021-04-01 12:40:57 [Thread-5] - Host 10.10.10.5 is offline 
+""2021-04-01 12:40:59 [Thread-4] - Host 10.10.20.129 is online 
+""2021-04-01 12:41:00 [Thread-5] - Host 10.10.10.5 is offline 
+""2021-04-01 12:41:01 [Thread-4] - Host 10.10.20.129 is online 
+"

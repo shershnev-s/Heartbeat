@@ -70,6 +70,11 @@ public class HeartBeatBotServiceImpl extends TelegramLongPollingBot implements H
     }
 
     @Override
+    public String getIPStatus(String ipAddress) {
+        return STATUSES.get(ipAddress);
+    }
+
+    @Override
     public void removeIPStatus(String ipAddress) {
         STATUSES.remove(ipAddress);
     }

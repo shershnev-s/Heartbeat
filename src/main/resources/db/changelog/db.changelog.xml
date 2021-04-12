@@ -2,9 +2,10 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
     <changeSet id="1" author="shershnev_s@tut.by">
-        <createTable tableName="user">
+        <createTable tableName="user_account">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
@@ -17,9 +18,9 @@
     </changeSet>
     <changeSet id="2" author="shershnev_s@tut.by">
         <insert catalogName="heart_beat"
-                tableName="user">
+                tableName="user_account">
             <column name="username" value="ADMIN"/>
-            <column name="password" value="$2y$12$ozgHOTh2ZJ/I6usaZ2SrkunYQPtBNR9MrA2n8HnW963WH8mvropLi"/>
+            <column name="password" value="$2y$12$CHmvXTaTGavetRs2rkmtkugRHy2V3g0Y.yXQ5g8aa2FghlacSKtPy "/>
             <column name="role" value="ADMIN"/>
         </insert>
     </changeSet>

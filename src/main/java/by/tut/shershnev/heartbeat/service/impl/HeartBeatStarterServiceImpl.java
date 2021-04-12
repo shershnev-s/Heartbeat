@@ -1,5 +1,8 @@
 package by.tut.shershnev.heartbeat.service.impl;
 
+import by.tut.shershnev.heartbeat.repository.UserAccountRepository;
+import by.tut.shershnev.heartbeat.repository.model.RoleEnum;
+import by.tut.shershnev.heartbeat.repository.model.UserAccount;
 import by.tut.shershnev.heartbeat.service.HeartBeatService;
 import by.tut.shershnev.heartbeat.service.HeartBeatStarterService;
 import by.tut.shershnev.heartbeat.service.SerializeDataService;
@@ -7,7 +10,10 @@ import by.tut.shershnev.heartbeat.service.exception.IPAddressAlreadyInPoolExcept
 import by.tut.shershnev.heartbeat.service.model.InetAddressDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
@@ -24,10 +30,12 @@ public class HeartBeatStarterServiceImpl implements HeartBeatStarterService {
     private final SerializeDataService serializeDataService;
     private static final Logger logger = LogManager.getLogger();
     private CopyOnWriteArrayList<String> ipAddresses = new CopyOnWriteArrayList<>();
+    private final UserAccountRepository userAccountRepository;
 
-    public HeartBeatStarterServiceImpl(HeartBeatService HeartBeatService, SerializeDataService serializeDataService) {
+    public HeartBeatStarterServiceImpl(HeartBeatService HeartBeatService, SerializeDataService serializeDataService, UserAccountRepository userAccountRepository) {
         this.heartBeatService = HeartBeatService;
         this.serializeDataService = serializeDataService;
+        this.userAccountRepository = userAccountRepository;
     }
 
     @PostConstruct
@@ -45,6 +53,7 @@ public class HeartBeatStarterServiceImpl implements HeartBeatStarterService {
         }
     }
 
+    @Transactional
     @Override
     public void startIPAttainabilityChecking(InetAddressDTO inetAddressDTO) throws IOException, InterruptedException, ExecutionException {
         String ipAddress = inetAddressDTO.getIpAddress();
@@ -52,6 +61,15 @@ public class HeartBeatStarterServiceImpl implements HeartBeatStarterService {
         ipAddresses.add(ipAddress);
         serializeDataService.serializeIPAddresses(ipAddresses);
         heartBeatService.startIPAttainabilityCheckingThread(ipAddress);
+/*        UserAccount userAccount = new UserAccount();
+        userAccount.setUsername("LolUser");
+        userAccount.setRole(RoleEnum.ADMIN);
+        userAccount.setPassword("sdfsdfsfsf");
+        try {
+            userAccountRepository.save(userAccount);
+        } catch (DataIntegrityViolationException e){
+            logger.info("Attempt to save user with invalid fields " + userAccount.getUsername());
+        }*/
     }
 
     @Override
