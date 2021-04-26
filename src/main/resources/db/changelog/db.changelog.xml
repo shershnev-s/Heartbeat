@@ -20,7 +20,7 @@
         <insert catalogName="heart_beat"
                 tableName="user_account">
             <column name="username" value="ADMIN"/>
-            <column name="password" value="$2y$12$CHmvXTaTGavetRs2rkmtkugRHy2V3g0Y.yXQ5g8aa2FghlacSKtPy "/>
+            <column name="password" value="$2y$12$95Ld918OG4DMWTeAbpdnAOwrZzc0nvc5ihLZfE15W2e9NOFNjUm6G"/>
             <column name="role" value="ADMIN"/>
         </insert>
     </changeSet>

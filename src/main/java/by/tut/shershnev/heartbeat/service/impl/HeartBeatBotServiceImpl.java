@@ -1,6 +1,7 @@
 package by.tut.shershnev.heartbeat.service.impl;
 
 import by.tut.shershnev.heartbeat.service.HeartBeatBotService;
+import by.tut.shershnev.heartbeat.service.HeartBeatService;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -14,7 +15,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static by.tut.shershnev.heartbeat.service.constant.ServiceConstant.BOT_TOKEN;
@@ -23,9 +23,14 @@ import static by.tut.shershnev.heartbeat.service.constant.ServiceConstant.BOT_US
 @Service
 public class HeartBeatBotServiceImpl extends TelegramLongPollingBot implements HeartBeatBotService {
 
+    private final HeartBeatService heartBeatService;
     private static final Logger logger = LogManager.getLogger();
-    private static final Map<String, String> STATUSES = new ConcurrentHashMap<>();
+    //private static final Map<String, String> STATUSES = new ConcurrentHashMap<>();
     private static final List<String> CHAT_IDS = new CopyOnWriteArrayList<>();
+
+    public HeartBeatBotServiceImpl(HeartBeatService heartBeatService) {
+        this.heartBeatService = heartBeatService;
+    }
 
     @Override
     public String getBotUsername() {
@@ -49,7 +54,7 @@ public class HeartBeatBotServiceImpl extends TelegramLongPollingBot implements H
                 message.setText("Hello!");
             }
             case "/status" -> {
-                String statusesForOutput = STATUSES.toString();
+                String statusesForOutput = getIPStatus();
                 removeUnnecessarySymbolsAndSetTextToMessage(statusesForOutput, message);
             }
         }
@@ -64,20 +69,16 @@ public class HeartBeatBotServiceImpl extends TelegramLongPollingBot implements H
         }
     }
 
-    @Override
-    public void setIPStatus(String ipAddress, String status) {
-        STATUSES.put(ipAddress, status);
+
+    public String getIPStatus() {
+        try {
+            return heartBeatService.getCurrentStatuses();
+        } catch (InterruptedException | IOException e) {
+            logger.error(e.getMessage());
+        }
+        return "";
     }
 
-    @Override
-    public String getIPStatus(String ipAddress) {
-        return STATUSES.get(ipAddress);
-    }
-
-    @Override
-    public void removeIPStatus(String ipAddress) {
-        STATUSES.remove(ipAddress);
-    }
 
     @Override
     public void sendMessageToBot(String ipAddress, String message) throws IOException {

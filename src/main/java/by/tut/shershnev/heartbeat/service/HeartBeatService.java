@@ -1,5 +1,6 @@
 package by.tut.shershnev.heartbeat.service;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutionException;
 
@@ -10,5 +11,7 @@ public interface HeartBeatService {
     String doSingleIPCheck(String ipAddress);
 
     void removeIpAddress(String ipAddress);
+
+    String getCurrentStatuses() throws InterruptedException, IOException;
 
 }

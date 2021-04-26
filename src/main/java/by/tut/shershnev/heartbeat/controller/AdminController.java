@@ -17,11 +17,11 @@ import java.util.concurrent.ExecutionException;
 
 @Controller
 @RequestMapping("/add_ip")
-public class AddIPController {
+public class AdminController {
 
     private final HeartBeatStarterService heartBeatStarterService;
 
-    public AddIPController(HeartBeatStarterService heartBeatStarterService) {
+    public AdminController(HeartBeatStarterService heartBeatStarterService) {
 
         this.heartBeatStarterService = heartBeatStarterService;
     }

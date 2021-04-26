@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -95,6 +96,11 @@ public class HeartBeatStarterServiceImpl implements HeartBeatStarterService {
         else {
             logger.error("Attempt to remove ip which doesn't exist");
         }
+    }
+
+    @Override
+    public List<String> getCurrentCheckedIPAddresses() {
+        return ipAddresses;
     }
 
     private void checkValidityIpAddress(String ipAddress) throws IPAddressAlreadyInPoolException, IOException {

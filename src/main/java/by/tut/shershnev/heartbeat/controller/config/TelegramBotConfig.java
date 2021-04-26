@@ -21,7 +21,7 @@ public class TelegramBotConfig {
             logger.info("Instantiate Telegram Bots API...");
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             logger.info("Register Telegram Bots API...");
-            botsApi.registerBot(new HeartBeatBotServiceImpl());
+            botsApi.registerBot(new HeartBeatBotServiceImpl(heartBeatService));
         } catch (TelegramApiException e) {
             logger.error("Exception instantiate Telegram Bot!", e);
         }

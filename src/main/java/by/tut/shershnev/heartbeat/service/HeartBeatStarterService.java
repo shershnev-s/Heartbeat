@@ -14,4 +14,6 @@ public interface HeartBeatStarterService {
     CopyOnWriteArrayList<InetAddressDTO> getAllAddresses() throws InterruptedException;
 
     void removeIP(InetAddressDTO inetAddressDTO);
+
+    List<String> getCurrentCheckedIPAddresses();
 }

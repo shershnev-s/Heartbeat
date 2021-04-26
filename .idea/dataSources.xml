@@ -16,11 +16,5 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5432/heart_beat</jdbc-url>
     </data-source>
-    <data-source source="LOCAL" name="heart_beat@localhost [2]" uuid="69a3b5bd-7d3b-4a05-b879-f6c4346578c3">
-      <driver-ref>postgresql</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5432/heart_beat</jdbc-url>
-    </data-source>
   </component>
 </project>
