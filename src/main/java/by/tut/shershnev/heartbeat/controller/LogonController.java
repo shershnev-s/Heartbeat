@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class LogonController {
 
+    @GetMapping("/")
+    public String forwardToMainPage(){
+        return "redirect:/add_ip";
+    }
+
     @GetMapping("/login")
     public String login() {
         return "login";

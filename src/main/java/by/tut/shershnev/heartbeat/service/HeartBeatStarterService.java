@@ -11,7 +11,7 @@ public interface HeartBeatStarterService {
 
     void startIPAttainabilityChecking(InetAddressDTO inetAddressDTO) throws IOException, InterruptedException, ExecutionException;
 
-    CopyOnWriteArrayList<InetAddressDTO> getAllAddresses() throws InterruptedException;
+    CopyOnWriteArrayList<InetAddressDTO> getAllAddresses() throws InterruptedException, IOException;
 
     void removeIP(InetAddressDTO inetAddressDTO);
 

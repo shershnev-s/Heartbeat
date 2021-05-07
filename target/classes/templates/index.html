@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,12 +9,19 @@
         integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <style>
         .btn-remove {
-            width: 30px;
+            width: 45px;
             height: 30px;
-            background-image: url('./images/trash.svg');
+            background-image: url('images/trash.svg');
             background-repeat: no-repeat;
             background-position: center;
             background-size: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .btn-remove svg {
+            width: 20px;
+            height: 20px;
         }
     </style>
     <title>Document</title>
@@ -22,64 +30,70 @@
 
     <nav class="navbar navbar-expand-lg navbar-success bg-success mb-5">
         <div class="container-fluid">
-            <a class="navbar-brand link-light" href="#">Creacept</a>
+            <a class="navbar-brand link-light" href="/add_ip">Creacept</a>
+            <!--<button type="submit" class="btn btn-success" th:href="@{/logout}">Logout</button>-->
+            <form action="/logout">
+                <input type="submit" value="Logout" />
+            </form>
         </div>
+        <div class="container-fluid">
+            <!--<button type="submit" class="btn btn-success" th:href="@{/logout}">Logout</button>-->
+            <form action="/change_password">
+                <input type="submit" value="Change password" />
+            </form>
+        </div>
+
     </nav>
 
     <div class="container">
         <div class="row">
             <div class="col-md d-flex justify-content-center mb-5">
-                <form>
-
+                <form action="/add_ip" method="post" th:object="${inetAddress}" th:action="@{/add_ip}" th:method="post" id="ipAdd" required >
+                    <span th:if="${#fields.hasErrors('ipAddress')}" th:errors="*{ipAddress}"></span>
+                    <span th:if="${exception!=empty}" th:text="${exception}"></span>
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">
+                        <label for="exampleIp" class="form-label">
                             Insert IP address for hearbeat checking
                         </label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <input type="text" class="form-control" id="exampleIP" aria-describedby="ipHelp" th:field="*{ipAddress}" required pattern="\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}\b"
+                               oninvalid="setCustomValidity('This ip address is invalid')"
+                               onemptied=""
+                               onchange="try{setCustomValidity('')}catch(e){}" placeholder="ip address" >
                     </div>
-
                     <button type="submit" class="btn btn-success">Submit</button>
+                    <p>
+                    <p>
+                    <button value="Refresh Page" onClick="window.location.reload();" class="btn btn-success">Refresh</button>
                 </form>
+
             </div>
+
             <div class="col-md d-flex justify-content-center">
                 <table class="table">
                     <thead class="table-success">
                         <tr>
-                            <th scope="col">#</th>
                             <th scope="col">Addersses</th>
-                            <th scope="col">Statusses</th>
+                            <th scope="col">Statuses</th>
                             <th scope="col">Handle</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>192.168.001.001</td>
-                            <td>active</td>
-                            <td>
-                                <button type="button" class="btn btn-remove btn-danger"></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>192.168.001.002</td>
-                            <td>deactive</td>
-                            <td>
-                                <button type="button" class="btn btn-remove btn-danger"></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>192.168.001.003</td>
-                            <td>active</td>
-                            <td>
-                                <button type="button" class="btn btn-remove btn-danger"></button>
-                            </td>
-                        </tr>
+                    <tr th:each="address : ${addresses}">
+                        <td th:text="${address.ipAddress}"></td>
+                        <td th:text="${address.status}"></td>
+                        <td>
+                            <form action="#" th:action="@{/add_ip/delete_ip/{ip}(ip=${address.ipAddress})}">
+                                <button type="submit" class="btn btn-remove btn-danger">
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><g xmlns="http://www.w3.org/2000/svg"><path d="m424 64h-88v-16c0-26.51-21.49-48-48-48h-64c-26.51 0-48 21.49-48 48v16h-88c-22.091 0-40 17.909-40 40v32c0 8.837 7.163 16 16 16h384c8.837 0 16-7.163 16-16v-32c0-22.091-17.909-40-40-40zm-216-16c0-8.82 7.18-16 16-16h64c8.82 0 16 7.18 16 16v16h-96z" fill="#ffffff" data-original="#000000" style="" class=""/><path d="m78.364 184c-2.855 0-5.13 2.386-4.994 5.238l13.2 277.042c1.22 25.64 22.28 45.72 47.94 45.72h242.98c25.66 0 46.72-20.08 47.94-45.72l13.2-277.042c.136-2.852-2.139-5.238-4.994-5.238zm241.636 40c0-8.84 7.16-16 16-16s16 7.16 16 16v208c0 8.84-7.16 16-16 16s-16-7.16-16-16zm-80 0c0-8.84 7.16-16 16-16s16 7.16 16 16v208c0 8.84-7.16 16-16 16s-16-7.16-16-16zm-80 0c0-8.84 7.16-16 16-16s16 7.16 16 16v208c0 8.84-7.16 16-16 16s-16-7.16-16-16z" fill="#ffffff" data-original="#000000" style="" class=""/></g></g></svg>
+                                </button>
+                            </form>
+                        </td>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
+
 </body>
 </html>

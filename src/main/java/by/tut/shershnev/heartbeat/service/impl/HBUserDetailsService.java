@@ -1,6 +1,5 @@
 package by.tut.shershnev.heartbeat.service.impl;
 
-/*
 import by.tut.shershnev.heartbeat.repository.model.UserAccount;
 import by.tut.shershnev.heartbeat.service.UserService;
 import by.tut.shershnev.heartbeat.service.model.HBUser;
@@ -9,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("userDetailsService")
 public class HBUserDetailsService implements UserDetailsService{
 
     private final UserService userService;
@@ -27,4 +26,3 @@ public class HBUserDetailsService implements UserDetailsService{
         return new HBUser(userAccount);
     }
 }
-*/

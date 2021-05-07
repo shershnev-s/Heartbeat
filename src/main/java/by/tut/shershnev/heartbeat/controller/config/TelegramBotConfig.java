@@ -1,5 +1,6 @@
 package by.tut.shershnev.heartbeat.controller.config;
 
+import by.tut.shershnev.heartbeat.service.HeartBeatService;
 import by.tut.shershnev.heartbeat.service.impl.HeartBeatBotServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,6 +15,11 @@ import javax.annotation.PostConstruct;
 public class TelegramBotConfig {
 
     private static final Logger logger = LogManager.getLogger();
+    private final HeartBeatService heartBeatService;
+
+    public TelegramBotConfig(HeartBeatService heartBeatService) {
+        this.heartBeatService = heartBeatService;
+    }
 
     @PostConstruct
     public void start() {

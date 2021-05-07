@@ -3,6 +3,8 @@ package by.tut.shershnev.heartbeat.controller;
 import by.tut.shershnev.heartbeat.service.HeartBeatStarterService;
 import by.tut.shershnev.heartbeat.service.exception.IPAddressAlreadyInPoolException;
 import by.tut.shershnev.heartbeat.service.model.InetAddressDTO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,14 +18,21 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 
 @Controller
+@SessionAttributes("username")
 @RequestMapping("/add_ip")
 public class AdminController {
 
     private final HeartBeatStarterService heartBeatStarterService;
+    private static final Logger logger = LogManager.getLogger();
 
     public AdminController(HeartBeatStarterService heartBeatStarterService) {
 
         this.heartBeatStarterService = heartBeatStarterService;
+    }
+
+    @ModelAttribute("username")
+    public String getUserName() {
+        return "";
     }
 
     @PostMapping
@@ -32,7 +41,7 @@ public class AdminController {
                         Model model) throws InterruptedException, ExecutionException {
         if (errors.hasErrors()) {
             model.addAttribute("inetAddress", inetAddress);
-            return "add_addresses";
+            return "index";
         } else {
             try {
                 heartBeatStarterService.startIPAttainabilityChecking(inetAddress);
@@ -45,12 +54,19 @@ public class AdminController {
     }
 
     @GetMapping
-    public String getAdmin(@ModelAttribute(name = "exception") String exception, Model model) throws InterruptedException {
-        CopyOnWriteArrayList<InetAddressDTO> addresses = heartBeatStarterService.getAllAddresses();
+    public String getAdmin(@ModelAttribute(name = "exception") String exception, Model model) {
+
+        CopyOnWriteArrayList<InetAddressDTO> addresses = null;
+        try {
+            addresses = heartBeatStarterService.getAllAddresses();
+        } catch (InterruptedException | IOException e) {
+            model.addAttribute("exception", "something gone wrong");
+            logger.error(e.getMessage());
+        }
         model.addAttribute("inetAddress", new InetAddressDTO());
         model.addAttribute("exception", exception);
         model.addAttribute("addresses", addresses);
-        return "add_addresses";
+        return "index";
     }
 
     @GetMapping("/delete_ip/{ip}")

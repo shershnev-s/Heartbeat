@@ -25,20 +25,18 @@ public class HeartBeatServiceImpl implements HeartBeatService {
     private static final List<String> IP_ADDRESSES_FOR_DELETE = Collections.synchronizedList(new ArrayList<>());
     private static final Map<String, String> STATUSES = Collections.synchronizedMap(new HashMap<>());
     private final HeartBeatBotService heartBeatBotService;
-    private final HeartBeatStarterService heartBeatStarterService;
 
-    public HeartBeatServiceImpl(HeartBeatBotService heartBeatBotService, HeartBeatStarterService heartBeatStarterService) {
+    public HeartBeatServiceImpl(HeartBeatBotService heartBeatBotService) {
         this.heartBeatBotService = heartBeatBotService;
-        this.heartBeatStarterService = heartBeatStarterService;
     }
 
     @Override
     public void startIPAttainabilityCheckingThread(String addedIpAddress) {
         Runnable pingTask = () -> {
+            STATUSES.put(addedIpAddress, " collecting data");
             List<Boolean> isReachablePool = new ArrayList<>();
             int collectingDataCounter = 0;
             while (!IP_ADDRESSES_FOR_DELETE.contains(addedIpAddress)) {
-                System.out.println(Thread.currentThread().getName() + " " + IP_ADDRESSES_FOR_DELETE);
                 collectingDataCounter++;
                 try {
                     boolean reachable = InetAddress.getByName(addedIpAddress).isReachable(REACHABILITY_CONDITION);
@@ -62,12 +60,7 @@ public class HeartBeatServiceImpl implements HeartBeatService {
     }
 
     @Override
-    public String doSingleIPCheck(String ipAddress) {
-        return heartBeatBotService.getIPStatus(ipAddress);
-    }
-
-    @Override
-    public void removeIpAddress(String ipAddress) {
+    public void removeIPAddress(String ipAddress) {
         IP_ADDRESSES_FOR_DELETE.add(ipAddress);
         logger.info(ipAddress + " was removed from pool");
     }
@@ -77,6 +70,12 @@ public class HeartBeatServiceImpl implements HeartBeatService {
         String allStatuses = "";
         allStatuses = removeUnnecessarySymbolsAndSetTextToMessage(STATUSES);
         return allStatuses;
+    }
+
+    @Override
+    public String getStatusForIPAddress(String ipAddress) {
+        String result = STATUSES.get(ipAddress);
+        return result;
     }
 
     private String removeUnnecessarySymbolsAndSetTextToMessage(Map<String, String> statuses) {
@@ -94,7 +93,6 @@ public class HeartBeatServiceImpl implements HeartBeatService {
             for (int i = 0; i < isReachablePool.size(); i++) {
                 if (!isReachablePool.contains(true)) {
                     heartBeatBotService.sendMessageToBot(ipAddress, "IS+UNREACHABLE!");
-                    //heartBeatBotService.setIPStatus(ipAddress, "IS UNREACHABLE!!");
                     STATUSES.put(ipAddress, " IS UNREACHABLE! ");
                     logger.info(ipAddress + " IS UNREACHABLE!");
                     while (!IP_ADDRESSES_FOR_DELETE.contains(ipAddress)) {
@@ -102,7 +100,6 @@ public class HeartBeatServiceImpl implements HeartBeatService {
                         boolean reachable = InetAddress.getByName(ipAddress).isReachable(REACHABILITY_CONDITION);
                         if (reachable) {
                             heartBeatBotService.sendMessageToBot(ipAddress, "AGAIN+REACHABLE!");
-                            //heartBeatBotService.setIPStatus(ipAddress, " IS AGAIN REACHABLE!");
                             STATUSES.put(ipAddress, " IS AGAIN REACHABLE! ");
                             logger.info(ipAddress + " IS AGAIN REACHABLE!");
                             break;

@@ -8,9 +8,9 @@ public interface HeartBeatService {
 
     void startIPAttainabilityCheckingThread(String ipAddress) throws InterruptedException, ExecutionException, UnknownHostException;
 
-    String doSingleIPCheck(String ipAddress);
+    String getStatusForIPAddress(String ipAddress);
 
-    void removeIpAddress(String ipAddress);
+    void removeIPAddress(String ipAddress);
 
     String getCurrentStatuses() throws InterruptedException, IOException;
 

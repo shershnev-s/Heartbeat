@@ -7,6 +7,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -28,7 +29,7 @@ public class HeartBeatBotServiceImpl extends TelegramLongPollingBot implements H
     //private static final Map<String, String> STATUSES = new ConcurrentHashMap<>();
     private static final List<String> CHAT_IDS = new CopyOnWriteArrayList<>();
 
-    public HeartBeatBotServiceImpl(HeartBeatService heartBeatService) {
+    public HeartBeatBotServiceImpl(@Lazy HeartBeatService heartBeatService) {
         this.heartBeatService = heartBeatService;
     }
 
@@ -69,7 +70,6 @@ public class HeartBeatBotServiceImpl extends TelegramLongPollingBot implements H
         }
     }
 
-
     public String getIPStatus() {
         try {
             return heartBeatService.getCurrentStatuses();
@@ -78,7 +78,6 @@ public class HeartBeatBotServiceImpl extends TelegramLongPollingBot implements H
         }
         return "";
     }
-
 
     @Override
     public void sendMessageToBot(String ipAddress, String message) throws IOException {
